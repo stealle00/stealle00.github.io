@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>feel Better</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+[data-theme="dark"] {
+  --bg: #0a0a0f; --surface: #111118; --surface2: #18181f; --surface3: #1e1e28;
+  --border: rgba(255,255,255,0.07); --text: #f0f0f5; --muted: rgba(240,240,245,0.4);
+  --muted2: rgba(240,240,245,0.15); --lime: #c8ff00; --lime-dim: rgba(200,255,0,0.12);
+  --card-hover: rgba(255,255,255,0.03);
+}
+[data-theme="light"] {
+  --bg: #f5f5f0; --surface: #ffffff; --surface2: #f0f0eb; --surface3: #e8e8e2;
+  --border: rgba(0,0,0,0.08); --text: #0a0a0f; --muted: rgba(10,10,15,0.45);
+  --muted2: rgba(10,10,15,0.1); --lime: #7ab800; --lime-dim: rgba(122,184,0,0.1);
+  --card-hover: rgba(0,0,0,0.02);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif;
+  min-height: 100vh; overflow-x: hidden; transition: background 0.4s, color 0.4s;
+}
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 2.5rem; border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(24px); transition: background 0.4s;
+}
+.nav-logo { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); }
+.nav-logo span { color: var(--lime); }
+.nav-right { display: flex; align-items: center; gap: 0.75rem; }
+.theme-toggle {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 999px;
+  padding: 0.4rem 0.75rem; font-size: 0.75rem; cursor: pointer; color: var(--muted);
+  transition: all 0.2s; font-family: 'Syne', sans-serif;
+}
+.theme-toggle:hover { border-color: var(--lime); color: var(--lime); }
+.nav-pill {
+  background: var(--lime); color: #0a0a0f; font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; padding: 0.55rem 1.2rem;
+  border-radius: 999px; cursor: pointer; border: none; font-family: 'Syne', sans-serif;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-pill:hover { transform: scale(1.04); box-shadow: 0 0 22px rgba(200,255,0,0.35); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; padding: 8rem 5vw 5rem;
+  display: grid; grid-template-columns: 1fr 400px; gap: 4rem;
+  align-items: center; max-width: 1260px; margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'Syne Mono', monospace; font-size: 0.68rem; color: var(--lime);
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem;
+  opacity: 0; animation: up 0.7s ease 0.1s forwards;
+}
+h1 {
+  font-size: clamp(3.5rem, 5.5vw, 6.5rem); font-weight: 800;
+  line-height: 0.93; letter-spacing: -0.04em;
+  opacity: 0; animation: up 0.7s ease 0.25s forwards;
+}
+h1 .hl { color: var(--lime); }
+h1 .dim { color: var(--muted2); }
+.hero-desc {
+  margin-top: 2rem; font-size: 1rem; line-height: 1.75;
+  color: var(--muted); max-width: 390px; font-weight: 400;
+  opacity: 0; animation: up 0.7s ease 0.4s forwards;
+}
+.hero-stats {
+  margin-top: 2.5rem; display: flex; gap: 2rem;
+  opacity: 0; animation: up 0.7s ease 0.55s forwards;
+}
+.hero-stat-val { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; color: var(--lime); line-height: 1; }
+.hero-stat-label {
+  font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.25rem;
+}
+
+/* PHONE */
+.phone-wrap {
+  opacity: 0; animation: fadeIn 0.9s ease 0.7s forwards;
+  display: flex; justify-content: center; align-items: center;
+}
+.phone {
+  width: 280px; height: 590px; background: #0d0d14;
+  border-radius: 44px; border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 70px 140px rgba(0,0,0,0.65), 0 0 0 6px #1a1a24,
+    0 0 0 7px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08);
+  overflow: hidden; display: flex; flex-direction: column; position: relative;
+}
+.phone-wallpaper {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(200,255,0,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 50%),
+    linear-gradient(160deg, #0d0d18 0%, #080810 100%);
+}
+.phone-notch {
+  width: 80px; height: 26px; background: #000;
+  border-radius: 0 0 18px 18px; margin: 0 auto;
+  position: relative; z-index: 10;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.notch-cam { width: 8px; height: 8px; border-radius: 50%; background: #1a1a1a; border: 1px solid #222; }
+.notch-speaker { width: 30px; height: 4px; border-radius: 99px; background: #1a1a1a; }
+.phone-inner {
+  padding: 0.3rem 1.1rem 0; flex: 1; display: flex; flex-direction: column;
+  position: relative; z-index: 1;
+}
+.status-bar {
+  display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0 0.5rem;
+}
+.status-clock { font-family: 'Syne Mono', monospace; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+.status-icons { font-size: 0.55rem; color: rgba(255,255,255,0.5); }
+
+/* HOMESCREEN */
+.homescreen { flex: 1; display: flex; flex-direction: column; }
+
+/* WIDGET — compact card at top of homescreen */
+.widget {
+  background: rgba(18,18,26,0.88); backdrop-filter: blur(16px);
+  border-radius: 18px; padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.09);
+  position: relative; overflow: hidden; margin-bottom: 0.6rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+}
+.widget::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--lime), transparent); opacity: 0.6;
+}
+.w-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.55rem; }
+.w-app { font-family: 'Syne Mono', monospace; font-size: 0.42rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+.w-badge {
+  background: var(--lime); color: #0a0a0f; font-size: 0.38rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; padding: 0.14rem 0.4rem;
+  border-radius: 999px; font-family: 'Syne Mono', monospace;
+  animation: badgePulse 2s ease infinite;
+}
+@keyframes badgePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(200,255,0,0.4); }
+  50%      { box-shadow: 0 0 0 3px rgba(200,255,0,0); }
+}
+.widget-body { display: flex; gap: 0.8rem; align-items: center; }
+
+/* mini ring */
+.ring-wrap { flex-shrink: 0; position: relative; width: 54px; height: 54px; }
+.ring-svg { width: 54px; height: 54px; }
+.ring-track { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 6; }
+.ring-fill {
+  fill: none; stroke: var(--lime); stroke-width: 6; stroke-linecap: round;
+  stroke-dasharray: 238.76; stroke-dashoffset: 238.76;
+  transform: rotate(-90deg); transform-origin: 27px 27px;
+  filter: drop-shadow(0 0 4px rgba(200,255,0,0.6));
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.25,1,0.5,1);
+}
+.ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.ring-time { font-size: 0.55rem; font-weight: 800; letter-spacing: -0.04em; color: #fff; line-height: 1; white-space: nowrap; }
+.ring-sub { font-family: 'Syne Mono', monospace; font-size: 0.27rem; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.1rem; }
+
+/* widget right side */
+.widget-content { flex: 1; min-width: 0; }
+.w-tabs { display: flex; gap: 0.2rem; margin-bottom: 0.45rem; }
+.w-tab {
+  flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 7px; padding: 0.2rem 0.08rem;
+  font-family: 'Syne', sans-serif; font-size: 0.35rem; font-weight: 700;
+  text-transform: uppercase; color: rgba(255,255,255,0.35); cursor: pointer; transition: all 0.2s;
+}
+.w-tab.active { background: var(--lime); color: #0a0a0f; border-color: var(--lime); }
+.w-msg { font-size: 0.5rem; line-height: 1.55; color: rgba(255,255,255,0.55); }
+.w-msg strong { color: var(--lime); }
+.w-notif { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.45rem; padding-top: 0.4rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.w-notif-dot { width: 4px; height: 4px; background: var(--lime); border-radius: 50%; flex-shrink: 0; animation: pulse 2s ease infinite; }
+.w-notif-text { font-size: 0.44rem; color: rgba(255,255,255,0.38); }
+
+/* APP GRID */
+.app-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem 0.4rem; padding: 0.4rem 0.2rem 0.5rem;
+}
+.app-icon { display: flex; flex-direction: column; align-items: center; gap: 0.28rem; }
+.app-icon-img {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; box-shadow: 0 2px 10px rgba(0,0,0,0.45);
+}
+.app-label { font-size: 0.34rem; color: rgba(255,255,255,0.55); text-align: center; font-family: 'Syne', sans-serif; }
+
+.app-ig   { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+.app-tt   { background: #010101; border: 1px solid rgba(255,255,255,0.1); }
+.app-yt   { background: #ff0000; }
+.app-sp   { background: #1db954; }
+.app-maps { background: linear-gradient(135deg,#4285f4,#34a853); }
+.app-msg  { background: linear-gradient(135deg,#29d643,#15b830); }
+.app-cam  { background: linear-gradient(135deg,#2c2c2c,#1a1a1a); border: 1px solid rgba(255,255,255,0.1); }
+.app-set  { background: linear-gradient(135deg,#636366,#48484a); }
+
+/* DOCK */
+.dock {
+  margin-top: auto; padding: 0.5rem 1rem 0.3rem;
+  background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; justify-content: space-around; align-items: center;
+}
+.dock-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.home-indicator { width: 70px; height: 4px; background: rgba(255,255,255,0.18); border-radius: 99px; margin: 0.45rem auto 0.2rem; }
+
+/* TICKER */
+.ticker { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; padding: 0.85rem 0; background: var(--surface); }
+.ticker-track { display: inline-flex; gap: 3rem; white-space: nowrap; animation: ticker 22s linear infinite; }
+.ticker-item { font-family: 'Syne Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 0.7rem; }
+.ticker-item .dot { color: var(--lime); font-size: 0.35rem; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* HOW IT WORKS */
+.how { max-width: 1260px; margin: 0 auto; padding: 7rem 5vw; }
+.section-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.65rem; color: var(--lime); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 1rem; }
+.section-title { font-size: clamp(2.2rem,3.5vw,3.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; margin-bottom: 4rem; }
+.how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+.how-card { background: var(--surface); padding: 2.5rem 2rem; transition: background 0.25s; position: relative; overflow: hidden; }
+.how-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--lime); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+.how-card:hover::before { transform: scaleX(1); }
+.how-card:hover { background: var(--card-hover); }
+.how-num { font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--lime); letter-spacing: 0.2em; margin-bottom: 1.5rem; }
+.how-icon { font-size: 2rem; margin-bottom: 1rem; }
+.how-title { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.6rem; }
+.how-text { font-size: 0.82rem; line-height: 1.8; color: var(--muted); font-weight: 400; }
+
+/* HABIT TRACKER */
+.tracker-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 5vw; }
+.tracker-inner { max-width: 1260px; margin: 0 auto; }
+.tracker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.habits-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+/* screen time banner */
+.st-banner {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1rem 1.5rem; margin-top: 2rem;
+}
+.st-banner-left { display: flex; align-items: center; gap: 0.85rem; }
+.st-source-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--lime); flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(200,255,0,0.6); animation: pulse 2s ease infinite;
+}
+.st-source-label { font-size: 0.82rem; font-weight: 700; letter-spacing: -0.02em; }
+.st-source-sub { font-family: 'Syne Mono', monospace; font-size: 0.55rem; color: var(--muted); letter-spacing: 0.08em; margin-top: 0.1rem; }
+.st-today-time { font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; color: var(--lime); }
+
+/* app breakdown */
+.app-breakdown {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--border); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; margin-top: 1rem;
+}
+.app-row {
+  background: var(--surface); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.85rem;
+}
+.app-row-icon { font-size: 1.3rem; flex-shrink: 0; }
+.app-row-info { flex: 1; min-width: 0; }
+.app-row-name { font-size: 0.78rem; font-weight: 700; letter-spacing: -0.02em; }
+.app-row-bar-wrap { margin-top: 0.3rem; height: 4px; background: var(--surface3); border-radius: 99px; overflow: hidden; }
+.app-row-bar { height: 100%; border-radius: 99px; transition: width 1s ease; }
+.app-row-time { font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--muted); white-space: nowrap; }
+
+/* ANALYTICS */
+.analytics-section { padding: 7rem 5vw; border-top: 1px solid var(--border); }
+.analytics-inner { max-width: 1260px; margin: 0 auto; }
+
+.week-tabs { display: flex; gap: 0.5rem; margin: 2.5rem 0; flex-wrap: wrap; }
+.week-tab {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 999px; padding: 0.45rem 1.1rem;
+  font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700;
+  color: var(--muted); cursor: pointer; transition: all 0.2s;
+}
+.week-tab.active { background: var(--lime); color: #0a0a0f; border-color: var(--lime); }
+.week-tab:hover:not(.active) { border-color: var(--lime); color: var(--lime); }
+
+.chart-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem;
+}
+.chart-legend { display: flex; gap: 1.5rem; margin-bottom: 1.75rem; }
+.leg-item { display: flex; align-items: center; gap: 0.4rem; font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.08em; }
+.leg-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+.bar-chart {
+  display: flex; align-items: flex-end; gap: 0.75rem;
+  height: 160px; padding-bottom: 0;
+}
+.bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; height: 100%; justify-content: flex-end; }
+.bar-pair { display: flex; gap: 3px; align-items: flex-end; width: 100%; justify-content: center; }
+.bar-actual {
+  width: 18px; border-radius: 4px 4px 0 0; background: var(--lime);
+  box-shadow: 0 0 8px rgba(200,255,0,0.3); transition: height 0.8s cubic-bezier(0.25,1,0.5,1);
+  position: relative;
+}
+.bar-target {
+  width: 18px; border-radius: 4px 4px 0 0; background: rgba(200,255,0,0.2);
+  transition: height 0.8s cubic-bezier(0.25,1,0.5,1);
+}
+.bar-val { font-family: 'Syne Mono', monospace; font-size: 0.48rem; color: var(--muted); }
+
+.chart-days { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+.chart-day { flex: 1; text-align: center; font-family: 'Syne Mono', monospace; font-size: 0.55rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.chart-day.today { color: var(--lime); font-weight: 700; }
+
+.metrics-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 1.5rem; }
+.metric-card { background: var(--surface); padding: 1.75rem 1.5rem; }
+.metric-val { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+.metric-val.positive { color: var(--lime); }
+.metric-val.negative { color: #f87171; }
+.metric-val.neutral { color: var(--text); }
+.metric-label { font-family: 'Syne Mono', monospace; font-size: 0.56rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
+.metric-delta { font-family: 'Syne Mono', monospace; font-size: 0.6rem; margin-top: 0.5rem; }
+.delta-up { color: var(--lime); }
+.delta-down { color: #f87171; }
+
+.insight-card {
+  background: var(--lime-dim); border: 1px solid rgba(200,255,0,0.2);
+  border-radius: 16px; padding: 1.5rem 1.75rem;
+  display: flex; align-items: flex-start; gap: 1rem;
+}
+.insight-icon { font-size: 1.5rem; flex-shrink: 0; }
+.insight-title { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.3rem; color: var(--text); }
+.insight-sub { font-size: 0.78rem; color: var(--muted); line-height: 1.7; font-weight: 400; }
+.habit-item {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 14px; cursor: pointer; transition: all 0.25s; user-select: none;
+}
+.habit-item:hover { border-color: var(--lime); }
+.habit-item.done { border-color: var(--lime); background: var(--lime-dim); }
+.habit-check {
+  width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; transition: all 0.25s; background: var(--surface3);
+}
+.habit-item.done .habit-check { background: var(--lime); border-color: var(--lime); color: #0a0a0f; }
+.habit-info { flex: 1; }
+.habit-name { font-size: 0.88rem; font-weight: 700; letter-spacing: -0.02em; }
+.habit-sub { font-family: 'Syne Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.06em; margin-top: 0.15rem; }
+.habit-xp { font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--lime); letter-spacing: 0.08em; font-weight: 700; opacity: 0; transition: opacity 0.25s; }
+.habit-item.done .habit-xp { opacity: 1; }
+
+/* XP PANEL */
+.xp-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; }
+.xp-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.25rem; }
+.xp-sub { font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.xp-level { margin-top: 1.5rem; display: flex; align-items: baseline; gap: 0.5rem; }
+.xp-val { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; color: var(--lime); line-height: 1; }
+.xp-label { font-family: 'Syne Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.xp-bar-wrap { margin-top: 1.25rem; }
+.xp-bar-meta { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.xp-bar-label { font-family: 'Syne Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.xp-track { height: 8px; background: var(--surface3); border-radius: 99px; overflow: hidden; }
+.xp-fill { height: 100%; background: var(--lime); border-radius: 99px; width: 0%; transition: width 0.6s ease; box-shadow: 0 0 10px rgba(200,255,0,0.4); }
+.streak-row { display: flex; gap: 0.4rem; margin-top: 1.5rem; }
+.streak-day { flex: 1; height: 36px; border-radius: 8px; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-family: 'Syne Mono', monospace; font-size: 0.5rem; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.3s; }
+.streak-day.active { background: var(--lime); color: #0a0a0f; font-weight: 700; }
+.streak-day.partial { background: rgba(200,255,0,0.3); color: var(--lime); }
+.achievements { margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.badge { background: var(--surface3); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.75rem; font-size: 0.65rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; transition: all 0.3s; opacity: 0.4; }
+.badge.unlocked { border-color: var(--lime); color: var(--lime); background: var(--lime-dim); opacity: 1; }
+
+/* WIDGET MINI STREAK */
+.w-streak {
+  display: flex; align-items: center; gap: 0.3rem;
+  margin-top: 0.45rem; padding-top: 0.4rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.w-streak-fire {
+  font-size: 0.75rem; line-height: 1;
+  animation: fireWobble 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(255,107,0,0.7));
+}
+.w-streak-num {
+  font-family: 'Syne Mono', monospace; font-size: 0.62rem; font-weight: 700;
+  color: #ff6b00; letter-spacing: -0.01em;
+}
+.w-streak-label {
+  font-family: 'Syne Mono', monospace; font-size: 0.44rem;
+  color: rgba(255,107,0,0.6); letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* FIRE STREAK */
+.streak-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, rgba(255,107,0,0.12), rgba(255,60,0,0.06));
+  border: 1px solid rgba(255,107,0,0.25);
+  border-radius: 14px; padding: 1rem 1.25rem; margin-top: 1.25rem;
+}
+.streak-fire-left { display: flex; align-items: center; gap: 0.75rem; }
+.streak-fire-emoji {
+  font-size: 2rem; line-height: 1;
+  animation: fireWobble 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255,107,0,0.6));
+}
+@keyframes fireWobble {
+  0%,100% { transform: scale(1) rotate(-3deg); }
+  50%      { transform: scale(1.08) rotate(3deg); }
+}
+.streak-fire-count { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.05em; color: #ff6b00; line-height: 1; }
+.streak-fire-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; color: rgba(255,107,0,0.7); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.15rem; }
+.streak-fire-right { text-align: right; }
+.streak-fire-best { font-family: 'Syne Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.08em; }
+.streak-fire-best span { color: #ff6b00; font-weight: 700; }
+.streak-fire-msg { font-size: 0.72rem; font-weight: 700; color: #ff6b00; margin-top: 0.2rem; }
+
+/* mini week dots below streak */
+.streak-dots { display: flex; gap: 0.35rem; margin-top: 0.75rem; }
+.streak-dot {
+  flex: 1; height: 6px; border-radius: 99px;
+  background: var(--surface3); transition: all 0.3s;
+}
+.streak-dot.hit { background: #ff6b00; box-shadow: 0 0 6px rgba(255,107,0,0.5); }
+.streak-dot.today { background: var(--lime); box-shadow: 0 0 6px rgba(200,255,0,0.5); }
+
+/* SIMULATOR */
+.sim-section { padding: 7rem 5vw; max-width: 1260px; margin: 0 auto; }
+.sim-header { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 3.5rem; }
+.section-desc { align-self: end; font-size: 0.9rem; line-height: 1.8; color: var(--muted); font-weight: 400; }
+.slider-block { margin-bottom: 2.5rem; }
+.slider-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.75rem; }
+.slider-label { font-family: 'Syne Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+.slider-val { font-size: 2.2rem; font-weight: 800; color: var(--lime); letter-spacing: -0.04em; }
+input[type=range] { -webkit-appearance: none; width: 100%; height: 2px; background: var(--border); border-radius: 99px; outline: none; cursor: pointer; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 16px rgba(200,255,0,0.45); transition: box-shadow 0.2s; }
+input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 28px rgba(200,255,0,0.75); }
+.result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+.rc { background: var(--surface); padding: 2rem; transition: background 0.25s; }
+.rc:hover { background: var(--card-hover); }
+.rc-emoji { font-size: 1.75rem; margin-bottom: 0.85rem; }
+.rc-cat { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+.rc-val { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); margin-bottom: 0.4rem; transition: all 0.4s; }
+.rc-desc { font-size: 0.75rem; line-height: 1.7; color: var(--muted); font-weight: 400; }
+
+/* SOCIAL PROOF */
+.social-section { border-top: 1px solid var(--border); background: var(--surface); padding: 6rem 5vw; }
+.social-inner { max-width: 1260px; margin: 0 auto; }
+.counter-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-top: 3rem; }
+.counter-card { background: var(--surface2); padding: 2.25rem 1.75rem; }
+.counter-num { font-size: 2.8rem; font-weight: 800; letter-spacing: -0.05em; color: var(--lime); line-height: 1; }
+.counter-label { font-family: 'Syne Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.4rem; }
+
+/* MANIFESTO */
+.manifesto { border-top: 1px solid var(--border); padding: 9rem 5vw; text-align: center; position: relative; overflow: hidden; }
+.manifesto::before {
+  content: 'fB'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-size: clamp(14rem,30vw,36rem); font-weight: 800; letter-spacing: -0.06em;
+  color: rgba(255,255,255,0.018); pointer-events: none; line-height: 1;
+}
+[data-theme="light"] .manifesto::before { color: rgba(0,0,0,0.025); }
+.manifesto-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.65rem; color: var(--lime); letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 2rem; }
+.manifesto-text { font-size: clamp(2.5rem,5vw,5.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.0; max-width: 780px; margin: 0 auto 2rem; position: relative; }
+.manifesto-text .hl { color: var(--lime); }
+.manifesto-quote { font-family: 'Syne Mono', monospace; font-size: 0.8rem; font-style: italic; color: var(--muted); max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.8; position: relative; }
+.manifesto-quote em { color: var(--lime); font-style: normal; }
+
+
+/* TEAM */
+.team-section { border-top: 1px solid var(--border); padding: 7rem 5vw; background: var(--surface); }
+.team-inner { max-width: 1260px; margin: 0 auto; }
+.team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-top: 3rem; }
+.team-card { background: var(--surface2); padding: 2rem 1.75rem; position: relative; transition: background 0.25s; overflow: hidden; }
+.team-card:hover { background: var(--card-hover); }
+.team-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--lime); transform:scaleX(0); transform-origin:left; transition:transform 0.35s ease; }
+.team-card:hover::before { transform:scaleX(1); }
+.team-card.lazy::before { background: var(--border); }
+.team-avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 1.25rem; }
+.team-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.25rem; }
+.team-role { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lime); margin-bottom: 0.85rem; }
+.team-card.lazy .team-role { color: var(--muted); }
+.team-bio { font-size: 0.78rem; line-height: 1.75; color: var(--muted); font-weight: 400; }
+.team-tag { display: inline-block; margin-top: 1rem; font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; padding: 0.25rem 0.65rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+.team-card.lazy .team-tag { border-color: rgba(255,255,255,0.04); color: rgba(240,240,245,0.2); font-style: italic; }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 1.75rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--surface); }
+.footer-logo { font-weight: 800; font-size: 1rem; letter-spacing: -0.03em; color: var(--text); }
+.footer-logo span { color: var(--lime); }
+.footer-copy { font-family: 'Syne Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.1em; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ANIMATIONS */
+@keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding-top: 7rem; }
+  .phone-wrap { order: -1; }
+  .how-grid, .tracker-grid, .sim-header, .result-grid { grid-template-columns: 1fr; }
+  .counter-grid { grid-template-columns: 1fr 1fr; }
+  footer { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">feel<span>Better</span></div>
+  <div class="nav-right">
+    <button class="theme-toggle" onclick="toggleTheme()">☀ / ☾</button>
+    <button class="nav-pill" onclick="scrollToTracker()">Inizia ora →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">// awareness widget v1.0</div>
+    <h1>Il tuo<br><span class="hl">tempo</span><br><span class="dim">è tuo.</span></h1>
+    <p class="hero-desc">Non blocchiamo i tuoi social. Ti mostriamo cosa potresti costruire col tempo che stai regalando all'algoritmo.</p>
+    <div class="hero-stats">
+      <div><div class="hero-stat-val" id="stat1">0h</div><div class="hero-stat-label">ore perse/giorno</div></div>
+      <div><div class="hero-stat-val" id="stat2">0</div><div class="hero-stat-label">giorni di vita/anno</div></div>
+      <div><div class="hero-stat-val" id="stat3">0</div><div class="hero-stat-label">libri possibili/anno</div></div>
+    </div>
+  </div>
+
+  <!-- PHONE MOCKUP -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-wallpaper"></div>
+      <div class="phone-notch">
+        <div class="notch-speaker"></div>
+        <div class="notch-cam"></div>
+      </div>
+      <div class="phone-inner">
+        <div class="status-bar">
+          <span class="status-clock" id="liveClock">--:--</span>
+          <span class="status-icons">▲ ◾ ▮▮▮</span>
+        </div>
+        <div class="homescreen">
+
+          <!-- feel Better WIDGET — small card, not full screen -->
+          <div class="widget">
+            <div class="w-header">
+              <span class="w-app">feel Better</span>
+              <span class="w-badge">live</span>
+            </div>
+            <div class="widget-body">
+              <!-- mini progress ring -->
+              <div class="ring-wrap">
+                <svg class="ring-svg" viewBox="0 0 54 54">
+                  <circle class="ring-track" cx="27" cy="27" r="21"/>
+                  <circle class="ring-fill"  cx="27" cy="27" r="21" id="ringArc"/>
+                </svg>
+                <div class="ring-center">
+                  <div class="ring-time" id="wTime">4h 32</div>
+                  <div class="ring-sub">oggi</div>
+                </div>
+              </div>
+              <!-- message content -->
+              <div class="widget-content">
+                <div class="w-tabs">
+                  <button class="w-tab active" onclick="switchTab(this,'mente')">📖 Mente</button>
+                  <button class="w-tab" onclick="switchTab(this,'legami')">🤝 Legami</button>
+                  <button class="w-tab" onclick="switchTab(this,'corpo')">🏃 Corpo</button>
+                </div>
+                <div class="w-msg" id="wMsg">In 4h 32m potevi leggere <strong>82 pagine</strong>. Da qui nasce l'idea che cambia tutto.</div>
+                <div class="w-notif">
+                  <div class="w-notif-dot"></div>
+                  <div class="w-notif-text">Potenziale non usato oggi: <strong style="color:var(--lime)" id="potLabel">100%</strong></div>
+                </div>
+                <!-- mini streak inside widget -->
+                <div class="w-streak">
+                  <span class="w-streak-fire">🔥</span>
+                  <span class="w-streak-num">67</span>
+                  <span class="w-streak-label">giorni di fila</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- APP GRID below widget -->
+          <div class="app-grid">
+            <div class="app-icon"><div class="app-icon-img app-ig">📸</div><div class="app-label">Instagram</div></div>
+            <div class="app-icon"><div class="app-icon-img app-tt">🎵</div><div class="app-label">TikTok</div></div>
+            <div class="app-icon"><div class="app-icon-img app-yt">▶️</div><div class="app-label">YouTube</div></div>
+            <div class="app-icon"><div class="app-icon-img app-sp">🎧</div><div class="app-label">Spotify</div></div>
+            <div class="app-icon"><div class="app-icon-img app-maps">🗺</div><div class="app-label">Maps</div></div>
+            <div class="app-icon"><div class="app-icon-img app-msg">💬</div><div class="app-label">Messaggi</div></div>
+            <div class="app-icon"><div class="app-icon-img app-cam">📷</div><div class="app-label">Camera</div></div>
+            <div class="app-icon"><div class="app-icon-img app-set">⚙️</div><div class="app-label">Impostaz.</div></div>
+          </div>
+
+          <!-- DOCK -->
+          <div class="dock">
+            <div class="dock-icon app-msg">💬</div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border-radius:12px">📞</div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#0a84ff,#0055ff);border-radius:12px">🌐</div>
+            <div class="dock-icon" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00);border-radius:12px">🎵</div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="dot">●</span> nutri la mente, non l'algoritmo</span>
+    <span class="ticker-item"><span class="dot">●</span> ogni minuto conta</span>
+    <span class="ticker-item"><span class="dot">●</span> il tempo è la tua unica ricchezza vera</span>
+    <span class="ticker-item"><span class="dot">●</span> scegli te stesso</span>
+    <span class="ticker-item"><span class="dot">●</span> feel Better, be yourself</span>
+    <span class="ticker-item"><span class="dot">●</span> meno scroll, più vita</span>
+    <span class="ticker-item"><span class="dot">●</span> nutri la mente, non l'algoritmo</span>
+    <span class="ticker-item"><span class="dot">●</span> ogni minuto conta</span>
+    <span class="ticker-item"><span class="dot">●</span> il tempo è la tua unica ricchezza vera</span>
+    <span class="ticker-item"><span class="dot">●</span> scegli te stesso</span>
+    <span class="ticker-item"><span class="dot">●</span> feel Better, be yourself</span>
+    <span class="ticker-item"><span class="dot">●</span> meno scroll, più vita</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how reveal">
+  <div class="section-eyebrow">// come funziona</div>
+  <div class="section-title">Tre passi.<br><span style="color:var(--lime)">Zero sensi di colpa.</span></div>
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num">01</div><div class="how-icon">👁</div><div class="how-title">Vedi il costo reale</div><p class="how-text">Il widget trasforma le ore su Instagram in qualcosa di concreto: pagine lette, km corsi, chiamate fatte. Non un numero freddo — una possibilità persa.</p></div>
+    <div class="how-card"><div class="how-num">02</div><div class="how-icon">🎯</div><div class="how-title">Traccia le abitudini</div><p class="how-text">Costruisci una routine giornaliera con micro-obiettivi realistici. Ogni check ti dà XP. Ogni streak ti avvicina alla versione di te che vuoi diventare.</p></div>
+    <div class="how-card"><div class="how-num">03</div><div class="how-icon">🚀</div><div class="how-title">Cresci ogni giorno</div><p class="how-text">Il progresso si accumula. Sbloccherai badge, vedrai i tuoi numeri salire e, soprattutto, inizierai a notare la differenza nella tua vita reale.</p></div>
+  </div>
+</div>
+
+<!-- HABIT TRACKER -->
+<section class="tracker-section" id="trackerSection">
+  <div class="tracker-inner">
+    <div class="section-eyebrow reveal">// obiettivi screen time</div>
+    <div class="section-title reveal">I tuoi obiettivi,<br><span style="color:var(--lime)">calcolati dal telefono.</span></div>
+
+    <div class="st-banner reveal">
+      <div class="st-banner-left">
+        <span class="st-source-dot"></span>
+        <div>
+          <div class="st-source-label">Sincronizzato con Screen Time</div>
+          <div class="st-source-sub">Aggiornato ora · dati di oggi</div>
+        </div>
+      </div>
+      <div class="st-today-time" id="stTodayTime">3h 42m</div>
+    </div>
+
+    <div class="app-breakdown reveal" id="appBreakdown"></div>
+
+    <div class="tracker-grid" style="margin-top:2.5rem">
+      <div>
+        <div style="font-family:'Syne Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;">Obiettivi di oggi · generati dal tuo utilizzo</div>
+        <div class="habits-list" id="habitsList"></div>
+      </div>
+      <div class="xp-panel reveal">
+        <div class="xp-title">Il tuo progresso</div>
+        <div class="xp-sub">oggi</div>
+        <div class="xp-level"><div class="xp-val" id="xpVal">0</div><div class="xp-label">XP guadagnati</div></div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-meta">
+            <span class="xp-bar-label">Livello <span id="levelLabel">1</span></span>
+            <span class="xp-bar-label"><span id="xpProgress">0</span> / 100 XP</span>
+          </div>
+          <div class="xp-track"><div class="xp-fill" id="xpBar"></div></div>
+        </div>
+        <div class="streak-row" id="streakRow"></div>
+        <div class="achievements" id="badges"></div>
+
+        <!-- FIRE STREAK -->
+        <div class="streak-banner" id="streakBanner">
+          <div class="streak-fire-left">
+            <div class="streak-fire-emoji">🔥</div>
+            <div>
+              <div class="streak-fire-count" id="streakCount">67</div>
+              <div class="streak-fire-label">giorni di fila</div>
+            </div>
+          </div>
+          <div class="streak-fire-right">
+            <div class="streak-fire-best">Record personale: <span>71 giorni</span></div>
+            <div class="streak-fire-msg">Non mollare ora! 🎯</div>
+          </div>
+        </div>
+        <div class="streak-dots" id="streakDots"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEEKLY ANALYTICS -->
+<section class="analytics-section reveal">
+  <div class="analytics-inner">
+    <div class="section-eyebrow">// andamento settimanale</div>
+    <div class="section-title">I tuoi progressi<br><span style="color:var(--lime)">settimana per settimana.</span></div>
+
+    <div class="week-tabs" id="weekTabs">
+      <button class="week-tab active" onclick="selectWeek(this,0)">Questa settimana</button>
+      <button class="week-tab" onclick="selectWeek(this,1)">Settimana scorsa</button>
+      <button class="week-tab" onclick="selectWeek(this,2)">2 sett. fa</button>
+      <button class="week-tab" onclick="selectWeek(this,3)">3 sett. fa</button>
+    </div>
+
+    <div class="chart-wrap reveal">
+      <div class="chart-legend">
+        <span class="leg-item"><span class="leg-dot" style="background:var(--lime)"></span>Screen Time effettivo (ore)</span>
+        <span class="leg-item"><span class="leg-dot" style="background:rgba(200,255,0,0.25)"></span>Obiettivo giornaliero</span>
+      </div>
+      <div class="bar-chart" id="barChart"></div>
+      <div class="chart-days" id="chartDays"></div>
+    </div>
+
+    <div class="metrics-grid reveal" id="metricsGrid"></div>
+    <div class="insight-card reveal" id="insightCard">
+      <div class="insight-icon">💡</div>
+      <div>
+        <div class="insight-title" id="insightTitle"></div>
+        <div class="insight-sub" id="insightSub"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATOR -->
+<section class="sim-section reveal">
+  <div class="sim-header">
+    <div>
+      <div class="section-eyebrow">// simulatore</div>
+      <div class="section-title">Quanto vale<br><span style="color:var(--lime)">il tuo tempo?</span></div>
+    </div>
+    <p class="section-desc">Trascina il cursore e scopri cosa potresti costruire col tempo che investi in te — invece di regalarlo all'algoritmo.</p>
+  </div>
+  <div class="slider-block">
+    <div class="slider-meta">
+      <span class="slider-label">Minuti liberati dai social</span>
+      <span class="slider-val" id="sliderVal">60 min</span>
+    </div>
+    <input type="range" min="10" max="180" value="60" id="timeSlider" oninput="updateDemo(this.value)">
+  </div>
+  <div class="result-grid">
+    <div class="rc"><div class="rc-emoji">📖</div><div class="rc-cat">Mente</div><div class="rc-val" id="rcMente">≈ 18 pagine</div><div class="rc-desc" id="rcMenteSub">Abbastanza per un'idea che ti cambia la prospettiva.</div></div>
+    <div class="rc"><div class="rc-emoji">🤍</div><div class="rc-cat">Legami</div><div class="rc-val" id="rcLegami">1 chiamata vera</div><div class="rc-desc" id="rcLegSub">Una conversazione profonda con chi ami davvero.</div></div>
+    <div class="rc"><div class="rc-emoji">🏃</div><div class="rc-cat">Corpo</div><div class="rc-val" id="rcCorpo">≈ 6 km</div><div class="rc-desc" id="rcCorSub">Una corsa o camminata che resetta tutto.</div></div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="social-section reveal">
+  <div class="social-inner">
+    <div class="section-eyebrow">// numeri reali</div>
+    <div class="section-title">Quello che <span style="color:var(--lime)">perdi</span><br>ogni anno.</div>
+    <div class="counter-grid">
+      <div class="counter-card"><div class="counter-num" id="c1">0</div><div class="counter-label">ore su social / anno</div></div>
+      <div class="counter-card"><div class="counter-num" id="c2">0</div><div class="counter-label">giorni di vita persi</div></div>
+      <div class="counter-card"><div class="counter-num" id="c3">0</div><div class="counter-label">libri che potresti leggere</div></div>
+      <div class="counter-card"><div class="counter-num" id="c4">0</div><div class="counter-label">km che potresti correre</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto reveal">
+  <div class="manifesto-eyebrow">// un pensiero</div>
+  <p class="manifesto-text">Non sei quello che <span class="hl">scrolla</span>.<br>Sei quello che <span class="hl">sceglie</span>.</p>
+  <p class="manifesto-quote">"Non è vero che abbiamo poco tempo — la verità è che ne perdiamo molto."<br><em>— Seneca</em></p>
+</section>
+
+
+<!-- TEAM -->
+<section class="team-section reveal">
+  <div class="team-inner">
+    <div class="section-eyebrow">// chi siamo</div>
+    <div class="section-title">4 studenti.<br><span style="color:var(--lime)">1 idea seria.</span></div>
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-avatar" style="background:linear-gradient(135deg,rgba(200,255,0,0.15),rgba(200,255,0,0.05))">💻</div>
+        <div class="team-name">Stefano</div>
+        <div class="team-role">Sviluppo & Logica</div>
+        <p class="team-bio">Il cervello tecnico del progetto. Ha scritto codice che funziona al primo tentativo — cosa che non dovrebbe essere possibile. Senza di lui, feel Better sarebbe ancora un file di testo vuoto.</p>
+        <span class="team-tag">dev</span>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar" style="background:linear-gradient(135deg,rgba(200,255,0,0.12),rgba(200,255,0,0.04))">⚙️</div>
+        <div class="team-name">Ivan</div>
+        <div class="team-role">Design & Vision</div>
+        <p class="team-bio">L'idea originale, il concept, l'estetica, la filosofia: tutto suo. Ha trasformato un problema reale in un prodotto che le persone vogliono davvero usare. Il progetto respira grazie a lui.</p>
+        <span class="team-tag">founder</span>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar" style="background:linear-gradient(135deg,rgba(200,255,0,0.10),rgba(200,255,0,0.03))">📊</div>
+        <div class="team-name">Giacomo</div>
+        <div class="team-role">Ricerca & Strategia</div>
+        <p class="team-bio">Il motore silenzioso del team. Ha scavato nei dati, costruito ogni slide, scritto ogni parola del pitch. Mentre gli altri dormivano, Giacomo aveva già finito. Probabilmente il più serio del gruppo.</p>
+        <span class="team-tag">strategy</span>
+      </div>
+
+      <div class="team-card lazy">
+        <div class="team-avatar" style="background:rgba(255,255,255,0.03)">😴</div>
+        <div class="team-name">Leonardo</div>
+        <div class="team-role">Membro Onorario</div>
+        <p class="team-bio">Ha scelto il nome. Ci ha messo tre settimane. È il suo unico contributo documentato. Ancora non è chiaro se fosse un membro del team o semplicemente qualcuno che passava di lì.</p>
+        <span class="team-tag">ha scelto il nome (in 3 settimane)</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">feel<span>Better</span></div>
+  <div class="footer-copy">Consapevolezza Digitale · v1.0</div>
+</footer>
+
+<script>
+/* THEME */
+function toggleTheme() {
+  const h = document.documentElement;
+  h.dataset.theme = h.dataset.theme === 'dark' ? 'light' : 'dark';
+}
+
+/* LIVE CLOCK */
+function updateClock() {
+  const now = new Date();
+  document.getElementById('liveClock').textContent =
+    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+}
+updateClock();
+setInterval(updateClock, 10000);
+
+/* HERO STATS */
+function animateCount(el, target, suffix, duration) {
+  duration = duration || 1400; suffix = suffix || '';
+  let start = null;
+  const step = ts => {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * target) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+setTimeout(function() {
+  animateCount(document.getElementById('stat1'), 2, 'h');
+  animateCount(document.getElementById('stat2'), 38);
+  animateCount(document.getElementById('stat3'), 52);
+}, 900);
+
+/* ═══════════════════════════════════════════════════
+   SINGLE SOURCE OF TRUTH — tutti i dati vengono da qui
+   ═══════════════════════════════════════════════════ */
+var appData = [
+  { name:'Instagram', icon:'📸', minutes:98,  color:'#e1306c', limitMin:90  },
+  { name:'TikTok',    icon:'🎵', minutes:67,  color:'#69c9d0', limitMin:60  },
+  { name:'YouTube',   icon:'▶️', minutes:45,  color:'#ff0000', limitMin:45  },
+  { name:'WhatsApp',  icon:'💬', minutes:28,  color:'#25d366', limitMin:30  },
+  { name:'Twitter/X', icon:'🐦', minutes:21,  color:'#1da1f2', limitMin:20  },
+  { name:'Safari',    icon:'🌐', minutes:13,  color:'#0a84ff', limitMin:30  }
+];
+var totalMinutesToday = appData.reduce(function(s,a){ return s+a.minutes; }, 0);
+
+/* Utility: minutes → "Xh Ym" */
+function fmtTime(min) {
+  var h = Math.floor(min/60), m = min%60;
+  return h > 0 ? h+'h '+m+'m' : m+'m';
+}
+
+/* ── WIDGET: sync time from source ── */
+function syncWidget() {
+  var total = fmtTime(totalMinutesToday);
+  var el = document.getElementById('wTime');
+  if (el) el.textContent = total.replace('h ','h ').replace('m','');
+  // also update banner
+  var st = document.getElementById('stTodayTime');
+  if (st) st.textContent = total;
+  // update widget message with real number
+  buildWidgetMsgs();
+}
+
+/* ── WIDGET TABS ── */
+var widgetMsgs = {};
+function buildWidgetMsgs() {
+  var t = fmtTime(totalMinutesToday);
+  var pages = Math.round(totalMinutesToday * 0.3);
+  var calls = Math.max(1, Math.floor(totalMinutesToday / 30));
+  var km    = (totalMinutesToday * 0.1).toFixed(1);
+  widgetMsgs = {
+    mente:  { msg: 'In '+t+' potevi leggere <strong>'+pages+' pagine</strong>. Da qui nasce l\'idea che cambia tutto.' },
+    legami: { msg: 'In '+t+' potevi fare <strong>'+calls+' chiamate</strong> con le persone che ami davvero.' },
+    corpo:  { msg: 'In '+t+' potevi correre <strong>'+km+' km</strong>. Il corpo che ti porta ovunque merita cura.' }
+  };
+}
+buildWidgetMsgs();
+
+function switchTab(btn, tab) {
+  document.querySelectorAll('.w-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('wMsg').innerHTML = widgetMsgs[tab].msg;
+}
+
+/* ── APP BREAKDOWN ── */
+function renderAppBreakdown() {
+  var el = document.getElementById('appBreakdown');
+  if (!el) return;
+  var maxMin = Math.max.apply(null, appData.map(function(a){ return a.minutes; }));
+  el.innerHTML = appData.map(function(a) {
+    var pct  = Math.round(a.minutes / totalMinutesToday * 100);
+    var barW = Math.round(a.minutes / maxMin * 100);
+    return '<div class="app-row">' +
+      '<div class="app-row-icon">' + a.icon + '</div>' +
+      '<div class="app-row-info">' +
+        '<div class="app-row-name">' + a.name +
+          ' <span style="font-weight:400;color:var(--muted);font-size:0.7rem">· ' + pct + '%</span></div>' +
+        '<div class="app-row-bar-wrap"><div class="app-row-bar" style="width:'+barW+'%;background:'+a.color+'99"></div></div>' +
+      '</div>' +
+      '<div class="app-row-time">' + fmtTime(a.minutes) + '</div></div>';
+  }).join('');
+}
+renderAppBreakdown();
+syncWidget();
+
+/* ── HABITS — auto-completed based on real data ── */
+// done = actual minutes <= limit for that app; or time-based goals marked as met/not
+var habits = [
+  {
+    id:'h1', icon:'📸', xp:30,
+    name:'Instagram sotto 1h 30m',
+    sub: function(){ var a=appData[0]; return 'Oggi: '+fmtTime(a.minutes)+' · limite: '+fmtTime(a.limitMin); },
+    done: function(){ return appData[0].minutes <= appData[0].limitMin; }
+  },
+  {
+    id:'h2', icon:'🎵', xp:25,
+    name:'TikTok sotto 1h',
+    sub: function(){ var a=appData[1]; return 'Oggi: '+fmtTime(a.minutes)+' · limite: '+fmtTime(a.limitMin); },
+    done: function(){ return appData[1].minutes <= appData[1].limitMin; }
+  },
+  {
+    id:'h3', icon:'▶️', xp:20,
+    name:'YouTube sotto 45m',
+    sub: function(){ var a=appData[2]; return 'Oggi: '+fmtTime(a.minutes)+' · limite: '+fmtTime(a.limitMin); },
+    done: function(){ return appData[2].minutes <= appData[2].limitMin; }
+  },
+  {
+    id:'h4', icon:'🌙', xp:40,
+    name:'Nessun social dopo le 22:00',
+    sub: function(){ return 'Rilevato: nessun utilizzo · obiettivo rispettato ✓'; },
+    done: function(){ return true; }   // simulated: no evening use detected
+  },
+  {
+    id:'h5', icon:'⏸️', xp:35,
+    name:'Pausa social a pranzo (12–13)',
+    sub: function(){ return 'Rilevato: Twitter/X aperto alle 12:42 · non rispettato'; },
+    done: function(){ return false; }  // simulated: opened app during lunch
+  }
+];
+var badgeDefs = [
+  { label:'Primo passo', icon:'⭐', threshold: 1 },
+  { label:'In zona',     icon:'🔥', threshold: 3 },
+  { label:'Full combo',  icon:'💎', threshold: 5 }
+];
+var doneSet = new Set();
+
+var days = ['Lu','Ma','Me','Gi','Ve','Sa','Do'];
+var streakActive = [0,1,2,3];
+
+function renderHabits() {
+  document.getElementById('habitsList').innerHTML = habits.map(function(h) {
+    var done = h.done();
+    var subText = typeof h.sub === 'function' ? h.sub() : h.sub;
+    return '<div class="habit-item' + (done?' done':'') + '" id="item-' + h.id + '" style="cursor:default">' +
+      '<div class="habit-check">' + (done?'✓':'') + '</div>' +
+      '<div class="habit-info">' +
+        '<div class="habit-name">' + h.icon + ' ' + h.name + '</div>' +
+        '<div class="habit-sub">' + subText + '</div>' +
+      '</div>' +
+      '<div class="habit-xp" style="opacity:' + (done?'1':'0.25') + '">' + (done?'+'+h.xp+' XP':'–') + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderStreak() {
+  document.getElementById('streakRow').innerHTML = days.map(function(d,i) {
+    var cls = streakActive.indexOf(i) >= 0 ? 'active' : i === 4 ? 'partial' : '';
+    return '<div class="streak-day ' + cls + '">' + d + '</div>';
+  }).join('');
+}
+
+function renderBadges() {
+  var doneCount = habits.filter(function(h){ return h.done(); }).length;
+  document.getElementById('badges').innerHTML = badgeDefs.map(function(b) {
+    var unlocked = doneCount >= b.threshold;
+    return '<div class="badge' + (unlocked?' unlocked':'') + '">' + b.icon + ' ' + b.label + '</div>';
+  }).join('');
+}
+
+function updateXP() {
+  var total = 0;
+  var doneCount = 0;
+  habits.forEach(function(h) {
+    if (h.done()) { total += h.xp; doneCount++; }
+  });
+  var level = Math.floor(total / 100) + 1;
+  var progress = total % 100;
+  document.getElementById('xpVal').textContent = total;
+  document.getElementById('levelLabel').textContent = level;
+  document.getElementById('xpProgress').textContent = progress;
+  document.getElementById('xpBar').style.width = progress + '%';
+
+  var pct = Math.min(doneCount / habits.length, 1);
+  var circ = 2 * Math.PI * 21;
+  var arc = document.getElementById('ringArc');
+  if (arc) {
+    arc.style.strokeDasharray = circ;
+    arc.style.strokeDashoffset = circ * (1 - pct);
+  }
+  document.getElementById('potLabel').textContent = Math.round((1 - pct) * 100) + '%';
+  renderBadges();
+}
+
+function renderBadgesCount() {
+  var doneCount = habits.filter(function(h){ return h.done(); }).length;
+  return doneCount;
+}
+
+/* toggleHabit removed — habits are auto-evaluated from screen time data */
+
+renderHabits();
+renderStreak();
+renderBadges();
+updateXP();
+
+/* SIMULATOR */
+function updateDemo(val) {
+  var mins = parseInt(val);
+  document.getElementById('sliderVal').textContent = mins >= 60
+    ? Math.floor(mins/60) + 'h' + (mins%60 > 0 ? ' ' + mins%60 + 'm' : '')
+    : mins + ' min';
+  var pages = Math.round(mins * 0.3);
+  document.getElementById('rcMente').textContent = '≈ ' + pages + ' pagine';
+  document.getElementById('rcMenteSub').textContent = pages < 12 ? 'Un capitolo. Un seme piantato.' : pages < 40 ? 'Abbastanza per un\'idea che ti cambia la prospettiva.' : 'Un libro ogni settimana. 52 nuovi mondi in un anno.';
+  document.getElementById('rcLegami').textContent = mins < 20 ? 'Un vocale sincero' : mins < 50 ? '1 chiamata vera' : Math.floor(mins/30) + ' conversazioni vere';
+  document.getElementById('rcLegSub').textContent = mins < 20 ? 'Anche un vocale vale più di 100 like.' : 'Una conversazione profonda con chi ami davvero.';
+  var km = (mins * 0.1).toFixed(1);
+  document.getElementById('rcCorpo').textContent = '≈ ' + km + ' km';
+  document.getElementById('rcCorSub').textContent = parseFloat(km) < 1 ? 'Il primo passo è già tutto.' : parseFloat(km) < 5 ? 'Una camminata che resetta tutto.' : 'Una corsa lunga. Endorfine, silenzio, chiarezza.';
+}
+
+/* COUNTERS */
+function animCountTo(id, target, suffix) {
+  suffix = suffix || '';
+  var el = document.getElementById(id);
+  if (!el) return;
+  var start = null;
+  var run = function(ts) {
+    if (!start) start = ts;
+    var p = Math.min((ts - start) / 1800, 1);
+    var ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * target) + suffix;
+    if (p < 1) requestAnimationFrame(run);
+  };
+  requestAnimationFrame(run);
+}
+
+/* SCROLL REVEAL */
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(function(el){ revealObs.observe(el); });
+
+var counterObs = new IntersectionObserver(function(entries) {
+  if (entries[0].isIntersecting) {
+    animCountTo('c1', 730, 'h');
+    animCountTo('c2', 30);
+    animCountTo('c3', 52);
+    animCountTo('c4', 2100);
+    counterObs.disconnect();
+  }
+}, { threshold: 0.3 });
+var gridEl = document.querySelector('.counter-grid');
+if (gridEl) counterObs.observe(gridEl);
+
+function scrollToTracker() {
+  var s = document.getElementById('trackerSection');
+  if (s) s.scrollIntoView({ behavior: 'smooth' });
+}
+
+/* WEEKLY ANALYTICS */
+var weekData = [
+  // week 0 = this week (Mon–today Wed), rest filled
+  { days:['Lu','Ma','Me','Gi','Ve','Sa','Do'], actual:[4.5,3.8,3.7,null,null,null,null], target:[3,3,3,3,3,3,3], todayIdx:2 },
+  { days:['Lu','Ma','Me','Gi','Ve','Sa','Do'], actual:[5.2,4.9,4.1,3.8,4.5,2.9,3.1],    target:[3,3,3,3,3,3,3], todayIdx:-1 },
+  { days:['Lu','Ma','Me','Gi','Ve','Sa','Do'], actual:[6.1,5.8,5.2,6.0,5.5,3.8,4.2],    target:[3,3,3,3,3,3,3], todayIdx:-1 },
+  { days:['Lu','Ma','Me','Gi','Ve','Sa','Do'], actual:[6.8,7.1,6.5,6.9,6.2,5.1,4.9],    target:[3,3,3,3,3,3,3], todayIdx:-1 }
+];
+
+var weekInsights = [
+  'Stai migliorando! Questa settimana hai già ridotto lo screen time del 19% rispetto a 3 settimane fa. Continua così.',
+  'Settimana scorsa hai risparmiato 42 minuti al giorno rispetto alla media precedente. Ottimo lavoro.',
+  'Due settimane fa eri a 5.4h/giorno di media. Già meglio della settimana precedente.',
+  'Tre settimane fa usavi il telefono 6.5h al giorno di media. Da lì è iniziato il cambiamento.'
+];
+
+var currentWeek = 0;
+
+function selectWeek(btn, idx) {
+  document.querySelectorAll('.week-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  currentWeek = idx;
+  renderChart(idx);
+  renderMetrics(idx);
+  renderInsight(idx);
+}
+
+function renderChart(idx) {
+  var w = weekData[idx];
+  var maxVal = 8;
+  var chartEl = document.getElementById('barChart');
+  var daysEl  = document.getElementById('chartDays');
+  if (!chartEl) return;
+
+  chartEl.innerHTML = w.days.map(function(d, i) {
+    var actual  = w.actual[i];
+    var target  = w.target[i];
+    var isToday = (i === w.todayIdx);
+    var isFuture = (actual === null);
+    var aH = isFuture ? 0 : Math.round((actual / maxVal) * 140);
+    var tH = Math.round((target / maxVal) * 140);
+    return '<div class="bar-group">' +
+      '<div class="bar-val">' + (isFuture ? '' : actual+'h') + '</div>' +
+      '<div class="bar-pair">' +
+        '<div class="bar-actual" style="height:' + aH + 'px;' + (isFuture?'opacity:0.15':'') + (isToday?';box-shadow:0 0 12px rgba(200,255,0,0.5)':'') + '"></div>' +
+        '<div class="bar-target" style="height:' + tH + 'px"></div>' +
+      '</div></div>';
+  }).join('');
+
+  daysEl.innerHTML = w.days.map(function(d, i) {
+    var isToday = (i === w.todayIdx);
+    return '<div class="chart-day' + (isToday?' today':'') + '">' + d + (isToday?' ●':'') + '</div>';
+  }).join('');
+}
+
+function renderMetrics(idx) {
+  var w = weekData[idx];
+  var filled = w.actual.filter(function(v){ return v !== null; });
+  var avg = filled.length ? (filled.reduce(function(s,v){ return s+v; },0)/filled.length).toFixed(1) : '-';
+  var best = filled.length ? Math.min.apply(null,filled).toFixed(1) : '-';
+  var underTarget = filled.filter(function(v){ return v <= 3; }).length;
+
+  // vs prev week
+  var delta = '-';
+  var deltaClass = 'neutral';
+  if (idx < weekData.length - 1) {
+    var prev = weekData[idx+1].actual.filter(function(v){ return v!==null; });
+    var prevAvg = prev.reduce(function(s,v){ return s+v; },0)/prev.length;
+    var diff = (parseFloat(avg) - prevAvg).toFixed(1);
+    delta = (diff > 0 ? '+' : '') + diff + 'h/g';
+    deltaClass = diff < 0 ? 'positive' : 'negative';
+  }
+
+  document.getElementById('metricsGrid').innerHTML =
+    '<div class="metric-card"><div class="metric-val ' + deltaClass + '">' + avg + 'h</div><div class="metric-label">Media giornaliera</div><div class="metric-delta ' + (deltaClass==='positive'?'delta-up':'delta-down') + '">' + delta + ' vs sett. prec.</div></div>' +
+    '<div class="metric-card"><div class="metric-val positive">' + best + 'h</div><div class="metric-label">Giorno migliore</div><div class="metric-delta" style="color:var(--muted)">record settimanale</div></div>' +
+    '<div class="metric-card"><div class="metric-val neutral">' + underTarget + '/7</div><div class="metric-label">Giorni sotto obiettivo</div><div class="metric-delta" style="color:var(--muted)">obiettivo: 3h/giorno</div></div>' +
+    '<div class="metric-card"><div class="metric-val ' + (idx===0?'positive':'neutral') + '">' + (idx===0?'↑ in corso':'✓ completata') + '</div><div class="metric-label">Stato settimana</div><div class="metric-delta" style="color:var(--muted)">' + filled.length + '/7 giorni registrati</div></div>';
+}
+
+function renderInsight(idx) {
+  var insights = [
+    { title:'Stai migliorando del 19% in 3 settimane 🎯', sub:'Questa settimana sei già a 4.0h/giorno di media contro le 6.5h di 3 settimane fa. Il cambiamento è reale.' },
+    { title:'42 minuti in meno al giorno rispetto alla settimana prima 📉', sub:'Ogni giorno risparmiato equivale a ~2 capitoli di libro o una camminata da 4km.' },
+    { title:'La settimana di svolta: -1.1h/giorno vs quella precedente 💡', sub:'La riduzione più grande è avvenuta nel weekend — spesso il momento più difficile.' },
+    { title:'Punto di partenza: 6.5h/giorno di media 📍', sub:'Da qui è iniziato il percorso. Confronta questi numeri con oggi per vedere quanto hai guadagnato.' }
+  ];
+  var ins = insights[idx];
+  document.getElementById('insightTitle').textContent = ins.title;
+  document.getElementById('insightSub').textContent   = ins.sub;
+}
+
+// Init analytics
+renderChart(0);
+renderMetrics(0);
+renderInsight(0);
+</script>
+</body>
+</html>
